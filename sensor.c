@@ -36,8 +36,8 @@ float sensor_read(fand_sensor_t *sensor)
 {
     char line[LINE_BUFFER_SIZE];
     int len;
-    char *eol = NULL;
-    long int temp;
+    char *tbuf = NULL;
+    long int value;
     FILE* file = fopen(sensor->path, "r");
 
     if (!file) {
@@ -45,21 +45,24 @@ float sensor_read(fand_sensor_t *sensor)
         return -1;
     }
 
-    if (!fgets(line, LINE_BUFFER_SIZE, file)) {
+    tbuf = fgets(line, LINE_BUFFER_SIZE, file);
+    // done with the file
+    fclose(file);
+
+    if (!tbuf) {
         syslog(LOG_ERR, "%s: %s", sensor->path, strerror(errno));
-        fclose(file);
         return -1;
     }
-    fclose(file);
     
     len = strlen(line);
     line[len-1] = 0;
     
-    temp = strtol(line, &eol, 10);
-    if (eol == line) {
+    tbuf = NULL;
+    value = strtol(line, &tbuf, 10);
+    if (tbuf == line) {
         syslog(LOG_ERR, "%s: invalid temperature", sensor->path);
         return -1;
     }
 
-    return temp * 0.001;
+    return value * 0.001;
 }
