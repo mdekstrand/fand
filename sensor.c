@@ -13,6 +13,9 @@
 #include "sensor.h"
 #include "memory.h"
 
+// 12-character lines are adequate to read a temperature
+#define LINE_BUFFER_SIZE 12
+
 fand_sensor_t* sensor_new(const char *name, const char *path)
 {
     fand_sensor_t *sensor = xmalloc(sizeof(fand_sensor_t));
@@ -26,69 +29,37 @@ void sensor_free(fand_sensor_t *sensor)
     free(sensor);
 }
 
-static char* readline(FILE* file) {
-    int size = 12;
-    int to_fetch = size;
-    char* full = xmalloc(12);
-    char* buf = full;
-
-    memset(full, 0, size);
-
-    do {
-        if (!fgets(buf, to_fetch, file)) {
-            if (full == buf) {
-                free(full);
-                return NULL;
-            } else {
-                return full;
-            }
-        }
-        int len = strlen(full);
-        if (full[len - 1] == '\n') {
-            full[len - 1] = 0;
-            return full;
-        } else {
-            size = size * 2;
-            full = xrealloc(full, size);
-            buf = full + len;
-            to_fetch = size - len;
-        }
-    } while (1);
-}
-
 /**
  * Read a sensor in decidegrees Celcius.
  */
-int sensor_read(fand_sensor_t *sensor)
+float sensor_read(fand_sensor_t *sensor)
 {
-    FILE* file = fopen(sensor->path, "r");
-    char* line;
-    char* eol = NULL;
-    int ret = -1;
+    char line[LINE_BUFFER_SIZE];
+    int len;
+    char *eol = NULL;
     long int temp;
+    FILE* file = fopen(sensor->path, "r");
+
     if (!file) {
         syslog(LOG_ERR, "%s: %s", sensor->path, strerror(errno));
-        goto done;
+        return -1;
     }
 
-    line = readline(file);
-    if (line == NULL) {
+    if (!fgets(line, LINE_BUFFER_SIZE, file)) {
         syslog(LOG_ERR, "%s: %s", sensor->path, strerror(errno));
-        goto closefile;
+        fclose(file);
+        return -1;
     }
-
+    fclose(file);
+    
+    len = strlen(line);
+    line[len-1] = 0;
+    
     temp = strtol(line, &eol, 10);
     if (eol == line) {
         syslog(LOG_ERR, "%s: invalid temperature", sensor->path);
-        goto freeline;
+        return -1;
     }
 
-    ret = (int) temp / 100;
-
-freeline:
-    free(line);
-closefile:
-    fclose(file);
-done:
-    return ret;
+    return temp * 0.001;
 }

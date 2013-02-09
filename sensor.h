@@ -16,6 +16,6 @@ void sensor_free(fand_sensor_t *sensor);
 /**
  * Read a sensor in decidegrees Celcius.
  */
-int sensor_read(fand_sensor_t *sensor);
+float sensor_read(fand_sensor_t *sensor);
 
 #endif //!defined(FAND_SENSOR_H)

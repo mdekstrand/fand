@@ -48,8 +48,8 @@ void run_loop(fand_layout_t *layout)
 {
     for (int i = 0; i < layout->sensor_count; i++) {
         fand_sensor_t *sensor = layout->sensors[i];
-        int temp = sensor_read(sensor);
-        syslog(LOG_DEBUG, "%s: %.1f C", sensor->name, temp * 0.1);
+        float temp = sensor_read(sensor);
+        syslog(LOG_DEBUG, "%s: %.1f C", sensor->name, temp);
     }
 }
 
