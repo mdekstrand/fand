@@ -8,11 +8,15 @@ AC_PROG_CC_C_O
 AC_PROG_CC_C99
 AC_PROG_INSTALL
 
-PKG_CHECK_MODULES(config, libconfuse, [], [AC_ERROR([must install libconfuse])])
-PKG_CHECK_MODULES(daemon, libdaemon, [], [AC_ERROR([must install libdaemon])])
+PKG_CHECK_MODULES(config, libconfuse, [],
+                  [AC_MSG_ERROR([must install libconfuse])])
+PKG_CHECK_MODULES(daemon, libdaemon, [], 
+                  [AC_MSG_ERROR([must install libdaemon])])
 
-AC_CHECK_HEADER([getopt.h], [], [AC_ERROR([must have GNU getopt])])
-AC_CHECK_HEADER([syslog.h], [], [AC_ERROR([what, you don't have a syslog?])])
+AC_CHECK_HEADER([getopt.h], [],
+                [AC_MSG_ERROR([must have GNU getopt])])
+AC_CHECK_HEADER([syslog.h], [],
+                [AC_MSG_ERROR([what, you don't have a syslog?])])
 
 AC_DEFINE_UNQUOTED([FAND], ["${PACKAGE}"], [The fand package name])
 AC_DEFINE_UNQUOTED([FAND_VERSION], ["${PACKAGE_VERSION}"],
