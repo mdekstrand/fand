@@ -227,6 +227,7 @@ int main(int argc, char *argv[])
             }
             return 2;
         }
+        daemon_retval_send(0);
 
         main_loop();
 
