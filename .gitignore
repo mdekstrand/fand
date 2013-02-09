@@ -10,6 +10,7 @@ config.status
 config.h
 autom4te.cache
 aclocal.m4
+TAGS
 
 config.h.in
 depcomp
