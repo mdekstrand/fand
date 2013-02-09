@@ -91,7 +91,6 @@ fand_layout_t* load_layout(const char *cfgfn)
     /* load the configuration. everything is carefully ordered to make freeing
        safe. */
     fand_layout_t* setup = NULL;
-    bool good = false;
     cfg_t *cfg;
     syslog(LOG_INFO, "loading configuration from %s", cfgfn);
     cfg = cfg_init(options, CFGF_NONE);
@@ -100,7 +99,7 @@ fand_layout_t* load_layout(const char *cfgfn)
         return NULL;
     }
     if (cfg_parse(cfg, cfgfn) == CFG_PARSE_ERROR) {
-        syslog(LOG_ERR, "%s: error parsing config file");
+        syslog(LOG_ERR, "%s: error parsing config file", cfgfn);
         cfg_free(cfg);
         return NULL;
     }
