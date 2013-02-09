@@ -9,9 +9,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <getopt.h>
-#include <syslog.h>
-#include <libgen.h>
-#include <daemon.h>
+#include <libdaemon/daemon.h>
 
 #include "util.h"
 #include "layout.h"
@@ -25,8 +23,6 @@ static const struct option opt_table[] = {
 
 static const char *config_file = SYSCONFDIR "/fand.conf";
 
-static int log_opts = LOG_NDELAY | LOG_PID;
-
 fand_layout_t *layout = NULL;
 
 static void parse_args(int argc, char *argv[])
@@ -38,7 +34,7 @@ static void parse_args(int argc, char *argv[])
             config_file = optarg;
             break;
         case 'd':
-            log_opts = LOG_PERROR;
+            daemon_set_verbosity(LOG_DEBUG);
             break;
         case '?':
             exit(2);
@@ -51,7 +47,7 @@ static void run_fans(fand_layout_t *layout)
     for (int i = 0; i < layout->sensor_count; i++) {
         fand_sensor_t *sensor = layout->sensors[i];
         float temp = sensor_read(sensor);
-        syslog(LOG_DEBUG, "%s: %.1f C", sensor->name, temp);
+        daemon_log(LOG_DEBUG, "%s: %.1f C", sensor->name, temp);
     }
 }
 
@@ -65,8 +61,9 @@ static void main_loop()
 
 int main(int argc, char *argv[])
 {
+    daemon_pid_file_ident = daemon_log_ident =
+        daemon_ident_from_argv0(argv[0]);
     parse_args(argc, argv);
-    openlog(basename(argv[0]), log_opts, LOG_DAEMON);
     layout = load_layout(config_file);
     main_loop();
     return 0;

@@ -6,7 +6,7 @@
 #include "config.h"
 
 #include <stdlib.h>
-#include <syslog.h>
+#include <libdaemon/dlog.h>
 #include <stdbool.h>
 #include <confuse.h>
 
@@ -71,10 +71,10 @@ static bool setup_sensors(fand_layout_t* setup, cfg_t *cfg)
         const char *title = cfg_title(sec);
         const char *path = cfg_getstr(sec, "path");
         if (path == NULL) {
-            syslog(LOG_ERR, "sensor %s: no path provided", title);
+            daemon_log(LOG_ERR, "sensor %s: no path provided", title);
             return false;
         }
-        syslog(LOG_INFO, "sensor %s: %s", title, path);
+        daemon_log(LOG_INFO, "sensor %s: %s", title, path);
         setup->sensors[i] = sensor_new(title, path);
     }
     return true;
@@ -91,21 +91,21 @@ fand_layout_t* load_layout(const char *cfgfn)
        safe. */
     fand_layout_t* setup = NULL;
     cfg_t *cfg;
-    syslog(LOG_INFO, "loading configuration from %s", cfgfn);
+    daemon_log(LOG_INFO, "loading configuration from %s", cfgfn);
     cfg = cfg_init(options, CFGF_NONE);
     if (!cfg) {
-        syslog(LOG_ERR, "cannot initialize libconfuse");
+        daemon_log(LOG_ERR, "cannot initialize libconfuse");
         return NULL;
     }
     if (cfg_parse(cfg, cfgfn) == CFG_PARSE_ERROR) {
-        syslog(LOG_ERR, "%s: error parsing config file", cfgfn);
+        daemon_log(LOG_ERR, "%s: error parsing config file", cfgfn);
         cfg_free(cfg);
         return NULL;
     }
 
     setup = setup_new(cfg);
     if (!setup) {
-        syslog(LOG_CRIT, "cannot allocate memory");
+        daemon_log(LOG_CRIT, "cannot allocate memory");
         cfg_free(cfg);
         return NULL;
     }

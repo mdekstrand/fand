@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <syslog.h>
+#include <libdaemon/dlog.h>
 #include <errno.h>
 
 #include "sensor.h"
@@ -41,7 +41,7 @@ float sensor_read(fand_sensor_t *sensor)
     FILE* file = fopen(sensor->path, "r");
 
     if (!file) {
-        syslog(LOG_ERR, "%s: %s", sensor->path, strerror(errno));
+        daemon_log(LOG_ERR, "%s: %s", sensor->path, strerror(errno));
         return -1;
     }
 
@@ -50,7 +50,7 @@ float sensor_read(fand_sensor_t *sensor)
     fclose(file);
 
     if (!tbuf) {
-        syslog(LOG_ERR, "%s: %s", sensor->path, strerror(errno));
+        daemon_log(LOG_ERR, "%s: %s", sensor->path, strerror(errno));
         return -1;
     }
     
@@ -60,7 +60,7 @@ float sensor_read(fand_sensor_t *sensor)
     tbuf = NULL;
     value = strtol(line, &tbuf, 10);
     if (tbuf == line) {
-        syslog(LOG_ERR, "%s: invalid temperature", sensor->path);
+        daemon_log(LOG_ERR, "%s: invalid temperature", sensor->path);
         return -1;
     }
 
