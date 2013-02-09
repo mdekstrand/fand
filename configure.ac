@@ -1,4 +1,4 @@
-AC_PREREQ(2.69)
+AC_PREREQ(2.67)
 AC_INIT(fand, 0.1, michael@elehack.net)
 AM_INIT_AUTOMAKE([foreign silent-rules])
 AM_MAINTAINER_MODE
