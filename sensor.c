@@ -83,7 +83,7 @@ int sensor_read(fand_sensor_t *sensor)
         goto freeline;
     }
 
-    ret = (int) temp;
+    ret = (int) temp / 100;
 
 freeline:
     free(line);

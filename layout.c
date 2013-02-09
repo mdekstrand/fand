@@ -75,6 +75,8 @@ static bool setup_sensors(fand_layout_t* setup, cfg_t *cfg)
             syslog(LOG_ERR, "sensor %s: no path provided", title);
             return false;
         }
+        syslog(LOG_INFO, "sensor %s: %s", title, path);
+        setup->sensors[i] = sensor_new(title, path);
     }
     return true;
 }

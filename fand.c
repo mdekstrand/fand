@@ -44,9 +44,23 @@ static void parse_args(int argc, char *argv[])
     }
 }
 
+void run_loop(fand_layout_t *layout)
+{
+    for (int i = 0; i < layout->sensor_count; i++) {
+        fand_sensor_t *sensor = layout->sensors[i];
+        int temp = sensor_read(sensor);
+        syslog(LOG_DEBUG, "%s: %.1f C", sensor->name, temp * 0.1);
+    }
+}
+
 int main(int argc, char *argv[])
 {
     parse_args(argc, argv);
     openlog(basename(argv[0]), log_opts, LOG_DAEMON);
     layout = load_layout(config_file);
+
+    while (true) {
+        run_loop(layout);
+        sleep(layout->interval);
+    }
 }
