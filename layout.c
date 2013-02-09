@@ -10,7 +10,7 @@
 #include <stdbool.h>
 #include <confuse.h>
 
-#include "memory.h"
+#include "util.h"
 #include "layout.h"
 
 static cfg_opt_t sensor_opts[] = {
@@ -20,7 +20,6 @@ static cfg_opt_t sensor_opts[] = {
 
 static cfg_opt_t fan_opts[] = {
     CFG_STR("path", NULL, CFGF_NONE),
-    CFG_BOOL("need_enable", true, CFGF_NONE),
     CFG_STR("sensor", NULL, CFGF_NONE),
     CFG_FLOAT("min_temp", 25.0, CFGF_NONE),
     CFG_FLOAT("max_temp", 45.0, CFGF_NONE),

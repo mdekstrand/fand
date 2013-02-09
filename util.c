@@ -3,7 +3,7 @@
  ********************************************************************/
 
 #include <stdlib.h>
-#include "memory.h"
+#include "util.h"
 
 void* xmalloc(size_t nbytes)
 {

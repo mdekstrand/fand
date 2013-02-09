@@ -11,7 +11,7 @@
 #include <errno.h>
 
 #include "sensor.h"
-#include "memory.h"
+#include "util.h"
 
 // 12-character lines are adequate to read a temperature
 #define LINE_BUFFER_SIZE 12

@@ -9,6 +9,7 @@ AC_PROG_CC_C99
 AC_PROG_INSTALL
 
 PKG_CHECK_MODULES(config, libconfuse, [], [AC_ERROR([must install libconfuse])])
+PKG_CHECK_MODULES(daemon, libdaemon, [], [AC_ERROR([must install libdaemon])])
 
 AC_CHECK_HEADER([getopt.h], [], [AC_ERROR([must have GNU getopt])])
 AC_CHECK_HEADER([syslog.h], [], [AC_ERROR([what, you don't have a syslog?])])

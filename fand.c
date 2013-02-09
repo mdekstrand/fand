@@ -11,7 +11,9 @@
 #include <getopt.h>
 #include <syslog.h>
 #include <libgen.h>
+#include <daemon.h>
 
+#include "util.h"
 #include "layout.h"
 
 static const char const *optchars = "c:d";
@@ -44,7 +46,7 @@ static void parse_args(int argc, char *argv[])
     }
 }
 
-void run_loop(fand_layout_t *layout)
+static void run_fans(fand_layout_t *layout)
 {
     for (int i = 0; i < layout->sensor_count; i++) {
         fand_sensor_t *sensor = layout->sensors[i];
@@ -53,14 +55,19 @@ void run_loop(fand_layout_t *layout)
     }
 }
 
+static void main_loop()
+{
+    while (true) {
+        run_fans(layout);
+        sleep(layout->interval);
+    }
+}
+
 int main(int argc, char *argv[])
 {
     parse_args(argc, argv);
     openlog(basename(argv[0]), log_opts, LOG_DAEMON);
     layout = load_layout(config_file);
-
-    while (true) {
-        run_loop(layout);
-        sleep(layout->interval);
-    }
+    main_loop();
+    return 0;
 }
