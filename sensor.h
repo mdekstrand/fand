@@ -8,6 +8,7 @@
 typedef struct fand_sensor {
     const char *name;
     const char *path;
+    float temp;
 } fand_sensor_t;
 
 fand_sensor_t* sensor_new(const char *name, const char *path);
