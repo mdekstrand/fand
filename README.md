@@ -60,5 +60,6 @@ MA 02110-1301 USA.
 
 ### Pull requests
 
-If you submit a pull request, you agree to license your contributions
-under this project's license.
+By submitting a pull request, you agree to license your contributions
+under this project's license unless another (compatible) license is
+specified with the pull request.
