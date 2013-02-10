@@ -1,5 +1,7 @@
 sbin_PROGRAMS = fand
 
+dist_doc_DATA = README.md
+
 noinst_HEADERS = layout.h fan.h sensor.h util.h
 
 LIBS = $(config_LIBS) $(daemon_LIBS)
