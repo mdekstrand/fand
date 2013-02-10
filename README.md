@@ -11,6 +11,14 @@ them to control fans.
   
 That's it.
 
+## Warning
+
+This program controls fans.  If those fans are misconfigured, it could
+overheat your system.  Use at your own risk; the author is not
+responsible for any damage this software may inflict on your computer,
+your house, your cat, or anything else that may be affected by your
+fans.
+
 ## Configuration
 
 `fand` reads its configuration (fans, sensors, etc.) from a
