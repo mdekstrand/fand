@@ -32,6 +32,21 @@ void fan_free(fand_fan_t *fan)
     free(fan);
 }
 
+void fan_set_power(fand_fan_t *fan, int power)
+{
+    FILE *file = fopen(fan->path, "w");
+    if (!file) {
+        daemon_log(LOG_WARNING, "opening fan %s failed: %s",
+                   fan->name, strerror(errno));
+        return;
+    }
+    if (fprintf(file, "%u\n", power) < 0) {
+        daemon_log(LOG_WARNING, "writing fan %s failed: %s",
+                   fan->name, strerror(errno));
+    }
+    fclose(file);
+}
+
 void fan_update(fand_fan_t *fan)
 {
     if (!fan->sensor) return;
@@ -53,4 +68,6 @@ void fan_update(fand_fan_t *fan)
     }
     daemon_log(LOG_DEBUG, "fan %s: setting power to %d",
                fan->name, power);
+
+    fan_set_power(fan, power);
 }
