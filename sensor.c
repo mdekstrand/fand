@@ -64,5 +64,6 @@ float sensor_read(fand_sensor_t *sensor)
         return -1;
     }
 
-    return value * 0.001;
+    sensor->temp = value * 0.001;
+    return sensor->temp;
 }

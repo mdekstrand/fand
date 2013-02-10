@@ -62,10 +62,17 @@ static void parse_args(int argc, char *argv[])
 
 static void run_fans(fand_layout_t *layout)
 {
+    // update the sensors
     for (int i = 0; i < layout->sensor_count; i++) {
         fand_sensor_t *sensor = layout->sensors[i];
         float temp = sensor_read(sensor);
         daemon_log(LOG_DEBUG, "%s: %.1f C", sensor->name, temp);
+    }
+
+    // run the fans
+    for (int i = 0; i < layout->fan_count; i++) {
+        fand_fan_t *fan = layout->fans[i];
+        fan_update(fan);
     }
 }
 
