@@ -23,10 +23,14 @@ fans.
 
 ## Install
 
-sh# aclocal 
+sh# aclocal
+
 sh# autoreconf 
+
 sh# automake --add-missing
+
 sh# ./configure 
+
 sh# make
 
 ## Configuration
