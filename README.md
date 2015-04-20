@@ -8,6 +8,8 @@ them to control fans.
 
 - libconfuse
 - libdaemon
+- autotools
+- pkg-config
   
 That's it.
 
@@ -18,6 +20,18 @@ overheat your system.  Use at your own risk; the author is not
 responsible for any damage this software may inflict on your computer,
 your house, your cat, or anything else that may be affected by your
 fans.
+
+## Install
+
+sh# aclocal
+
+sh# autoreconf 
+
+sh# automake --add-missing
+
+sh# ./configure 
+
+sh# make
 
 ## Configuration
 
